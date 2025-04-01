@@ -19,6 +19,7 @@ const RestaurantDetails = () => {
     const { restaurantId } = useParams();
     const { data, isLoading, refetch } =
         useGetRestaurantDetailsQuery(restaurantId);
+
     const {
         data: menuData,
         isLoading: menuLoading,
@@ -53,7 +54,7 @@ const RestaurantDetails = () => {
         return menu.name.toLowerCase().includes(search.toLowerCase());
     });
 
-    if (isLoading) {
+    if (isLoading || menuLoading) {
         return <Loading />;
     }
 

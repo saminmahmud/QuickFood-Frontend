@@ -1,15 +1,15 @@
 import React, { useContext, useEffect, useState } from "react";
 import CartTotal from "../components/CartTotal";
 import { Link } from "react-router-dom";
-import CartQuantity from "../components/CartQuantity";
 import { AuthContext } from "../context/AuthContext";
 import { toast } from "react-toastify";
+import { RemoveFromCart } from "../cart/CartFunctionality";
 
 const Cart = () => {
     const [cartItem, setCartItem] = useState(
         JSON.parse(localStorage.getItem("cart")) || []
     );
-    const { removeFromCart } = CartQuantity();
+
     const { cartItemCount, setCartItemCount } = useContext(AuthContext);
 
     useEffect(() => {
@@ -23,13 +23,11 @@ const Cart = () => {
         }
     }, []);
 
-    const subTotalPrice = cartItem.reduce((total, item) => {
-        return total + parseFloat(item.price) * parseInt(item.quantity);
-    }, 0);
 
     const handleRemoveCart = (menuId) => {
-        removeFromCart(menuId);
+        RemoveFromCart(menuId);
         setCartItem(JSON.parse(localStorage.getItem("cart")) || []);
+        setCartItemCount(JSON.parse(localStorage.getItem("cart")) || []);
     };
 
     return (

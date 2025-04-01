@@ -13,31 +13,10 @@ import { RiDeleteBin5Line } from "react-icons/ri";
 const MenuItems = ({ restaurantId, menuData, isLoading, menuRefetch }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedMenu, setSelectedMenu] = useState(null);
-    const { quantity, increaseQuantity, decreaseQuantity, addToCart } =
-        CartQuantity();
 
     const { isLoggedIn, isOwner } = useContext(AuthContext);
     const [deleteMenu] = useDeleteMenuMutation();
 
-    const handleAddToCart = (data) => {
-        if (!isLoggedIn) {
-            toast.warning("Please login first.", {
-                position: "top-right",
-            });
-        } else {
-            addToCart({
-                restaurantId: data.restaurantId,
-                menuId: data.menuId,
-                image: data.image,
-                name: data.name,
-                price: data.price,
-                quantity: quantity,
-            });
-            toast.success("Item added to cart successfully.", {
-                position: "top-right",
-            });
-        }
-    };
 
     const handleEditClick = (menu) => {
         setSelectedMenu(menu);
@@ -119,63 +98,28 @@ const MenuItems = ({ restaurantId, menuData, isLoading, menuRefetch }) => {
                                 <p className="text-gray-200">
                                     {description.slice(0, 40)}...
                                 </p>
-                                <div className="flex justify-between items-center mt-4">
+                                <div className="">
                                     <p className="text-xl text-green-600 font-semibold">
                                         ${price}
                                     </p>
 
                                     {/* Quantity Counter */}
-                                    {(isOwner === "false" || !isOwner) && (
-                                        <div className="flex items-center space-x-2 text-white">
-                                            <button
-                                                className="btn btn-sm btn-outline hover:bg-gray-600"
-                                                onClick={decreaseQuantity}
-                                            >
-                                                -
-                                            </button>
-                                            <span className="text-lg">
-                                                {quantity}
-                                            </span>
-                                            <button
-                                                className="btn btn-sm btn-outline hover:bg-gray-600"
-                                                onClick={increaseQuantity}
-                                            >
-                                                +
-                                            </button>
-                                        </div>
+                                    {(isOwner === "false" || !isOwner) && (    
+                                        <CartQuantity item={item}/>
                                     )}
                                 </div>
 
                                 <div
-                                    className={`card-actions ${
-                                        isOwner === "false" || !isOwner
-                                            ? "justify-between"
-                                            : "justify-end"
-                                    } items-center mt-4`}
+                                    className={`card-actions mt-4`}
                                 >
-                                    {(isOwner === "false" || !isOwner) && (
-                                        <button
-                                            onClick={() => {
-                                                handleAddToCart({
-                                                    restaurantId,
-                                                    menuId: itemId,
-                                                    image,
-                                                    name,
-                                                    price,
-                                                    quantity,
-                                                });
-                                            }}
-                                            className="btn btn-primary text-white"
+                                    <div className="w-full flex justify-end items-center gap-2">
+                                        <Link
+                                            to={`/restaurant/${restaurantId}/menu/${itemId}`}
+                                            className="badge badge-outline flex justify-end items-center text-end"
                                         >
-                                            Add to Cart
-                                        </button>
-                                    )}
-                                    <Link
-                                        to={`/restaurant/${restaurantId}/menu/${itemId}`}
-                                        className="badge badge-outline"
-                                    >
-                                        <LuSquareArrowOutUpRight className="text-lg text-white" />
-                                    </Link>
+                                            <LuSquareArrowOutUpRight className="text-lg text-white" />
+                                        </Link>
+                                    </div>
                                 </div>
                             </div>
                         </div>

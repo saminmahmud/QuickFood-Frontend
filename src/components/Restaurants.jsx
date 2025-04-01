@@ -27,6 +27,7 @@ const Restaurants = () => {
         isSuccess: ownerRestaurantIsSuccess,
         refetch: ownerRestauranRefetch,
     } = useGetRestaurantByOwnerQuery(localStorage.getItem("u_id") || null);
+    
     const { isLoggedIn, isOwner } = useContext(AuthContext);
     const [deleteRestaurant] = useDeleteRestaurantMutation();
 
@@ -71,9 +72,7 @@ const Restaurants = () => {
         }
     };
 
-    if (isOwner == "true" && ownerRestaurantLoading) {
-        return <Loading />;
-    } else if (isOwner == "false" && isLoading) {
+    if (isLoading || ownerRestaurantLoading) {
         return <Loading />;
     }
 
