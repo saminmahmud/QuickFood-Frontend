@@ -12,11 +12,10 @@ import { useGetMenuSearchByRestaurantQuery } from "../features/menu/menuSLice";
 const RestaurantDetails = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
-
     const [search, setSearch] = useState("");
-    const [menu, setmenu] = useState([]);
 
     const { restaurantId } = useParams();
+
     const { data, isLoading, refetch } =
         useGetRestaurantDetailsQuery(restaurantId);
 
@@ -25,11 +24,8 @@ const RestaurantDetails = () => {
         isLoading: menuLoading,
         refetch: menuRefetch,
     } = useGetMenuSearchByRestaurantQuery(restaurantId);
-    const { isLoggedIn, isOwner } = useContext(AuthContext);
 
-    useEffect(() => {
-        setmenu(menuData || []);
-    }, [menuData]);
+    const { isLoggedIn, isOwner } = useContext(AuthContext);
 
     useEffect(() => {
         refetch();
@@ -50,13 +46,13 @@ const RestaurantDetails = () => {
         setSearch(e.target.value);
     };
 
-    const menuList = menu?.filter((menu) => {
-        return menu.name.toLowerCase().includes(search.toLowerCase());
-    });
-
     if (isLoading || menuLoading) {
         return <Loading />;
     }
+    
+    const menuList = menuData.filter((menu) => {
+        return menu.name.toLowerCase().includes(search.toLowerCase());
+    });
 
     return (
         <div>

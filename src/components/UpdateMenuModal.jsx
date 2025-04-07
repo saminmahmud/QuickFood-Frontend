@@ -67,7 +67,7 @@ const UpdateMenuModal = ({ menuData, isOpen, onClose, onRefetch }) => {
                 data: formDataObj,
                 id: parseInt(menuData.itemId),
             }).unwrap();
-            onRefetch();
+            await onRefetch();
             onClose();
             toast.success("Menu updated successfully.", {
                 position: "top-right",

@@ -75,13 +75,13 @@ const UpdateRestaurantModal = ({
                 data: formDataObj,
                 id: parseInt(restaurantData.id),
             }).unwrap();
-            onRefetch();
+            await onRefetch();
             onClose();
             toast.success("Restaurant updated successfully.", {
                 position: "top-right",
             });
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             toast.error("Something went wrong. Please try again.", {
                 position: "top-right",
             });

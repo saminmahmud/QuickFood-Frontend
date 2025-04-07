@@ -17,35 +17,19 @@ import { toast } from "react-toastify";
 const Restaurants = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [search, setSearch] = useState("");
-    const [restaurant, setRestaurant] = useState([]);
     const [selectedRestaurant, setSelectedRestaurant] = useState(null);
 
-    const { data, isLoading, isSuccess, refetch } = useGetRestaurantListQuery();
-    const {
-        data: ownerRestaurant,
-        isLoading: ownerRestaurantLoading,
-        isSuccess: ownerRestaurantIsSuccess,
-        refetch: ownerRestauranRefetch,
-    } = useGetRestaurantByOwnerQuery(localStorage.getItem("u_id") || null);
-    
     const { isLoggedIn, isOwner } = useContext(AuthContext);
-    const [deleteRestaurant] = useDeleteRestaurantMutation();
+    
+    const { data: restaurant, isLoading, isSuccess, refetch } = isOwner =="true"
+    ? useGetRestaurantByOwnerQuery(localStorage.getItem("u_id") || null)
+    :useGetRestaurantListQuery();
 
-    useEffect(() => {
-        if (isOwner === "true") {
-            setRestaurant(ownerRestaurant || []);
-        } else {
-            setRestaurant(data || []);
-        }
-    }, [isOwner, data, ownerRestaurant]);
+    const [deleteRestaurant] = useDeleteRestaurantMutation();
 
     useEffect(() => {
         refetch();
     }, [isLoggedIn, isOwner, refetch]);
-
-    useEffect(() => {
-        ownerRestauranRefetch();
-    }, [ownerRestaurant, isOwner, ownerRestauranRefetch]);
 
     const handleEditClick = (restaurant) => {
         setSelectedRestaurant(restaurant);
@@ -60,7 +44,6 @@ const Restaurants = () => {
     const handleDelete = async (id) => {
         try {
             await deleteRestaurant(id).unwrap();
-            ownerRestauranRefetch();
             refetch();
             toast.success("Restaurant Deleted successfully.", {
                 position: "top-right",
@@ -72,7 +55,7 @@ const Restaurants = () => {
         }
     };
 
-    if (isLoading || ownerRestaurantLoading) {
+    if (isLoading) {
         return <Loading />;
     }
 
@@ -91,7 +74,7 @@ const Restaurants = () => {
                     <div className="pb-5">
                         <AddRestaurantForm
                             refetch={refetch}
-                            ownerRestauranRefetch={ownerRestauranRefetch}
+                            ownerRestauranRefetch={refetch}
                         />
                     </div>
                 ) : (
@@ -218,9 +201,7 @@ const Restaurants = () => {
                         restaurantData={selectedRestaurant}
                         isOpen={isModalOpen}
                         onClose={handleCloseModal}
-                        onRefetch={
-                            isOwner == "true" ? ownerRestauranRefetch : refetch
-                        }
+                        onRefetch={refetch}
                     />
                 )}
             </div>
