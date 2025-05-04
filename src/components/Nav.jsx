@@ -161,7 +161,7 @@ const Nav = () => {
 
                 {/* Profile dropdown */}
                 {isLoggedIn && (
-                    <div className="hidden md:flex justify-center items-center gap-5">
+                    <div className="relative hidden md:flex justify-center items-center gap-5">
                         {isOwner == "false" && (
                             <Link to="/cart">
                                 <div className="relative">
@@ -203,7 +203,7 @@ const Nav = () => {
 
                         {/* Dropdown menu */}
                         {dropdownOpen && (
-                            <div className="absolute top-12 right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
+                            <div className="absolute top-8 right-0 mt-2 w-40 bg-white rounded-lg shadow-lg z-10">
                                 <ul className="text-black font-semibold">
                                     {isLoggedIn && isOwner == "false" && (
                                         <li>
