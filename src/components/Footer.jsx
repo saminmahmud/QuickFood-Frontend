@@ -97,7 +97,7 @@ const Footer = () => {
                 </div>
 
                 <div className="mt-8 text-center text-gray-400">
-                    <p>&copy; 2025 QuickFood. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} QuickFood. All rights reserved.</p>
                 </div>
             </div>
         </footer>
